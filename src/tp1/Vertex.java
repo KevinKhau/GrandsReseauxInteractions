@@ -5,6 +5,9 @@ import java.util.Optional;
 
 public abstract class Vertex {
 	int number;
+	boolean alreadyVisited = false;
+	
+	abstract int getAccessibleNeighborsCount();
 	
 	static public Optional<? extends Vertex> containsVertex(List<? extends Vertex> l, int n) {
 		for (Vertex v: l) {
