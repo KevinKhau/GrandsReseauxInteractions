@@ -1,7 +1,10 @@
 package tp1;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class StandardGraph extends Graph {
 	
@@ -47,26 +50,26 @@ public class StandardGraph extends Graph {
 	
 	@Override
 	int getArcsCount() {
-		int count = 0;
-		for (StandardVertex v : vertices) {
-			count += v.neighbors.size();
-		}
-		return count/2;
+		return vertices.stream().mapToInt(v -> v.neighbors.size()).sum() / 2;
 	}
 
 	@Override
 	int getVertexMaxNumber() {
-		StandardVertex res = vertices.stream().max((v1, v2) -> Integer.compare(v1.number, v2.number)).get();
-		return res.number;
+		return vertices.stream().max((v1, v2) -> Integer.compare(v1.number, v2.number)).get().number;
+	}
+	
+	int getAccessibleNeighborsCount(int vertexNumber) {
+		return vertices.stream().filter(v -> v.number == vertexNumber).findAny().get().getAccessibleNeighborsCount();
 	}
 
 	@Override
 	void printStats() {
-		System.out.print(getVerticesCount());
-		System.out.print(" ");
-		System.out.print(getArcsCount());
-		System.out.print(" ");
-		System.out.print(getVertexMaxNumber());
+		ArrayList<Integer> stats = new ArrayList<>(Arrays.asList(new Integer[] {
+				getVerticesCount(),
+				getArcsCount(),
+				getVertexMaxNumber()
+		}));
+		System.out.println(stats.stream().map(Object::toString).collect(Collectors.joining(" ")));
 	}
 	
 }

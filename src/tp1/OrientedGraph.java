@@ -1,14 +1,17 @@
 package tp1;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class OrientedGraph extends Graph {
-	
+
 	public final static String NAME = "digraph";
 	public final static String NEIGHBORS_SEPARATOR = "->";
 	public LinkedList<OrientedVertex> vertices = new LinkedList<OrientedVertex>();
-	
+
 	@Override
 	String getNeighborsSeparator() {
 		return NEIGHBORS_SEPARATOR;
@@ -23,7 +26,7 @@ public class OrientedGraph extends Graph {
 	OrientedVertex addVertex(int number) {
 		Optional<OrientedVertex> v = containsVertex(number);
 		if (!v.isPresent()) {
-			OrientedVertex otherVertex = new OrientedVertex(number); 
+			OrientedVertex otherVertex = new OrientedVertex(number);
 			vertices.add(otherVertex);
 			return otherVertex;
 		} else {
@@ -44,55 +47,56 @@ public class OrientedGraph extends Graph {
 		return vertices.size();
 	}
 
+	/**
+	 * Obtenir le nombre d'arcs : chaque arc est comptabilisé deux fois : pour
+	 * le sommet sortant, et celui entrant. Il suffit donc, pour tous les
+	 * sommets, de ne prendre que les arcs entrants.
+	 */
 	@Override
 	int getArcsCount() {
-		int count = 0;
-		for (OrientedVertex v : vertices) {
-			count += v.from.size() + v.to.size();
-		}
-		return count/2;
+		return vertices.stream().mapToInt(v -> v.from.size()).sum();
 	}
-	
+
 	/**
 	 * @return Degré sortant maximum d'un sommet
 	 */
 	int getMaxOutArc() {
-		OrientedVertex res = vertices.stream().max((v1, v2) -> Integer.compare(v1.to.size(), v2.to.size())).get();
-		return res.to.size();
+		return vertices.stream().max((v1, v2) -> Integer.compare(v1.to.size(), v2.to.size())).get().to.size();
 	}
-	
+
 	/**
 	 * @return Degré entrant maximum d'un sommet
 	 */
 	int getMaxInArc() {
-		OrientedVertex res = vertices.stream().max((v1, v2) -> Integer.compare(v1.from.size(), v2.from.size())).get();
-		return res.from.size();
+		return vertices.stream().max((v1, v2) -> Integer.compare(v1.from.size(), v2.from.size())).get().from.size();
 	}
 
 	/**
 	 * @return Valeur du plus haut sommet
 	 */
 	int getVertexMaxNumber() {
-		OrientedVertex res = vertices.stream().max((v1, v2) -> Integer.compare(v1.number, v2.number)).get();
-		return res.number;
+		return vertices.stream().max((v1, v2) -> Integer.compare(v1.number, v2.number)).get().number;
+	}
+
+	int getAccessibleNeighborsCount(int vertexNumber) {
+		return vertices.stream().filter(v -> v.number == vertexNumber).findAny().get().getAccessibleNeighborsCount();
 	}
 	
 	@Override
 	void printStats() {
-		System.out.print(getVerticesCount());
-		System.out.print(" ");
-		System.out.print(getArcsCount());
-		System.out.print(" ");
-		System.out.print(getMaxOutArc());
-		System.out.print(" ");
-		System.out.print(getMaxInArc());
-		System.out.print(" ");
-		System.out.print(getVertexMaxNumber());
+		ArrayList<Integer> stats = new ArrayList<>(Arrays.asList(new Integer[] {
+				getVerticesCount(),
+				getArcsCount(),
+				getMaxOutArc(),
+				getMaxInArc(),
+				getVertexMaxNumber()
+		}));
+		System.out.println(stats.stream().map(Object::toString).collect(Collectors.joining(" ")));
 	}
-	
+
 	@Override
 	public String toString() {
 		return "OrientedGraph [vertices=" + vertices + "\n]";
 	}
-	
+
 }

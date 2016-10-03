@@ -27,4 +27,26 @@ public class OrientedVertex extends Vertex {
 				+ Arrays.toString(to.stream().map(v -> v.number).toArray(Integer[]::new)) + "]";
 	}
 
+	public int getChildrenCount() {
+		return to.size();
+	}
+
+	/**
+	 * Parcours en profondeur
+	 */
+	@Override
+	int getAccessibleNeighborsCount() {
+		int count = 0;
+		if (!alreadyVisited) {
+			alreadyVisited = true;
+			count++;
+		}
+		for (OrientedVertex child : to) {
+			if (!child.alreadyVisited) {
+				count += child.getAccessibleNeighborsCount();
+			}
+		}
+		return count;
+	}
+	
 }

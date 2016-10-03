@@ -45,6 +45,12 @@ public abstract class Graph {
 	abstract int getVertexMaxNumber();
 	abstract void printStats();
 	
+	/**
+	 * Nombre de sommets accessibles, en itérant, donc descendants inclus
+	 * @param vertexNumber Numéro du sommet de départ
+	 */
+	abstract int getAccessibleNeighborsCount(int vertexNumber);
+	
 	final static class GraphProvider {
 
 		Graph graph = null;
