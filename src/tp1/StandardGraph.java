@@ -17,6 +17,7 @@ public class StandardGraph extends Graph {
 		return NEIGHBORS_SEPARATOR;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	Optional<StandardVertex> containsVertex(int numberArg) {
 		return (Optional<StandardVertex>) Vertex.containsVertex(vertices, numberArg);

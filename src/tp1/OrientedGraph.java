@@ -17,6 +17,7 @@ public class OrientedGraph extends Graph {
 		return NEIGHBORS_SEPARATOR;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	Optional<OrientedVertex> containsVertex(int numberArg) {
 		return (Optional<OrientedVertex>) Vertex.containsVertex(vertices, numberArg);
