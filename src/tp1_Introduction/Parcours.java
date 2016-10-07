@@ -10,16 +10,10 @@ public class Parcours {
 			System.exit(1);
 		}
 		int vertexNumber = Integer.parseInt(args[1]);
-		long startTime = System.nanoTime();
+		
 		Graph g = GraphProvider.loadDotFile(args[0]);
 //		System.out.println(g);
-		g.printStats();
 		System.out.println(g.getAccessibleNeighborsCount(vertexNumber));
-		
-		long endTime = System.nanoTime();
-		long duration = (endTime - startTime);
-		System.out.println(duration + "ns");
-		System.out.println(duration/1000000 + "ms");
 	}
 
 }
