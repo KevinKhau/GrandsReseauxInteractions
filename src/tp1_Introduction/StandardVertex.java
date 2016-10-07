@@ -1,4 +1,4 @@
-package tp1;
+package tp1_Introduction;
 
 import java.util.HashSet;
 

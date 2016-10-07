@@ -1,4 +1,4 @@
-package tp1;
+package tp1_Introduction;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -41,17 +41,22 @@ public abstract class Graph {
 	abstract String getNeighborsSeparator();
 
 	abstract int getVerticesCount();
+
 	abstract int getArcsCount();
+
 	abstract int getVertexMaxNumber();
+
 	abstract void printStats();
-	
+
 	/**
 	 * Nombre de sommets accessibles, en itérant, donc descendants inclus
-	 * @param vertexNumber Numéro du sommet de départ
+	 * 
+	 * @param vertexNumber
+	 *            Numéro du sommet de départ
 	 */
 	abstract int getAccessibleNeighborsCount(int vertexNumber);
-	
-	final static class GraphProvider {
+
+	public final static class GraphProvider {
 
 		Graph graph = null;
 

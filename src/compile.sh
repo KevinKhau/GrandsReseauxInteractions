@@ -1,2 +1,2 @@
-javac tp1/*.java
+javac tp1_Introduction/*.java
 

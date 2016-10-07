@@ -1,4 +1,4 @@
-package tp1;
+package tp1_Introduction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,5 +72,5 @@ public class StandardGraph extends Graph {
 		}));
 		System.out.println(stats.stream().map(Object::toString).collect(Collectors.joining(" ")));
 	}
-	
+
 }

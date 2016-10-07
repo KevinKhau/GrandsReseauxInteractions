@@ -1,3 +1,3 @@
-java tp1/StatsDeBase Exemple.dot
-java tp1/Parcours Exemple.dot 1
+java tp1_Introduction/StatsDeBase Exemple.dot
+java tp1_Introduction/Parcours Exemple.dot 1
 

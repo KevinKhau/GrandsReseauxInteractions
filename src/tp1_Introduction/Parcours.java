@@ -1,6 +1,6 @@
-package tp1;
+package tp1_Introduction;
 
-import tp1.Graph.GraphProvider;
+import tp1_Introduction.Graph.GraphProvider;
 
 public class Parcours {
 

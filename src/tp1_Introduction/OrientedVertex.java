@@ -1,4 +1,4 @@
-package tp1;
+package tp1_Introduction;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -10,7 +10,7 @@ public class OrientedVertex extends Vertex {
 	}
 
 	HashSet<OrientedVertex> from = new HashSet<>(); // parents
-	HashSet<OrientedVertex> to = new HashSet<>(); // enfants pointés
+	public HashSet<OrientedVertex> to = new HashSet<>(); // enfants pointés
 
 	void addParent(OrientedVertex v) {
 		from.add(v);
@@ -24,7 +24,8 @@ public class OrientedVertex extends Vertex {
 	public String toString() {
 		return "\nOrientedVertex [number=" + number + ", from="
 				+ Arrays.toString(from.stream().map(v -> v.number).toArray(Integer[]::new)) + ", to="
-				+ Arrays.toString(to.stream().map(v -> v.number).toArray(Integer[]::new)) + "]";
+				+ Arrays.toString(to.stream().map(v -> v.number).toArray(Integer[]::new)) + ", index=" + index
+				+ ", low=" + low + "]";
 	}
 
 	public int getChildrenCount() {
@@ -48,5 +49,5 @@ public class OrientedVertex extends Vertex {
 		}
 		return count;
 	}
-	
+
 }

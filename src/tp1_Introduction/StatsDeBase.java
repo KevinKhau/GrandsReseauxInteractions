@@ -1,6 +1,6 @@
-package tp1;
+package tp1_Introduction;
 
-import tp1.Graph.GraphProvider;
+import tp1_Introduction.Graph.GraphProvider;
 
 public class StatsDeBase {
 
@@ -10,7 +10,7 @@ public class StatsDeBase {
 			System.exit(1);
 		}
 		Graph g = GraphProvider.loadDotFile(args[0]);
-//		System.out.println(g);
+		// System.out.println(g);
 		g.printStats();
 	}
 
