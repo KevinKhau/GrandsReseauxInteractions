@@ -1,7 +1,10 @@
 package tp1_Introduction;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -62,7 +65,7 @@ public abstract class Graph {
 
 		public static Graph loadDotFile(String path) {
 			String extension = "";
-			String expectedExtension = "dot";
+			final String expectedExtension = "dot";
 			int i = path.lastIndexOf('.');
 			if (i > 0) {
 				extension = path.substring(i + 1);
@@ -77,9 +80,10 @@ public abstract class Graph {
 			 * Toutes les lignes commençant avec un digit sont considérées.
 			 **/
 			try (Stream<String> stream = Files.lines(Paths.get(path))) {
-				stream.map(line -> line.trim().replace(";", ""))
-						.filter(line -> !line.isEmpty() && Character.isDigit(line.charAt(0)))
-						.forEach(line -> loadLine(graph, line));
+				 stream.map(line -> line.trim().replace(";", ""))
+				 .filter(line -> !line.isEmpty() &&
+				 Character.isDigit(line.charAt(0)))
+				 .forEach(line -> loadLine(graph, line)); // pas assez performant
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -152,7 +156,6 @@ public abstract class Graph {
 				System.err.println("Attendu : maximum " + Graph.MAX_NUMBERS_PER_LINE + " numéros");
 				break;
 			}
-
 		}
 
 	}

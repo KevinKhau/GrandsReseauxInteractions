@@ -39,8 +39,8 @@ public class OrientedGraph extends Graph {
 	void addVertices(int v1, int v2) {
 		OrientedVertex vertex1 = addVertex(v1);
 		OrientedVertex vertex2 = addVertex(v2);
-		vertex1.addChild(vertex2);
-		vertex2.addParent(vertex1);
+//		vertex1.addChild(vertex2);
+//		vertex2.addParent(vertex1);
 	}
 
 	@Override

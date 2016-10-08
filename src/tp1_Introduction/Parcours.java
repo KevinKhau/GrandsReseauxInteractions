@@ -11,9 +11,17 @@ public class Parcours {
 		}
 		int vertexNumber = Integer.parseInt(args[1]);
 		
+		long startTime = System.nanoTime();
+		
 		Graph g = GraphProvider.loadDotFile(args[0]);
 //		System.out.println(g);
 		System.out.println(g.getAccessibleNeighborsCount(vertexNumber));
+		
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		System.out.println(duration + "ns");
+		System.out.println(duration/1000000 + "ms");
+		System.out.println(duration/1000000000 + "s");
 	}
 
 }
