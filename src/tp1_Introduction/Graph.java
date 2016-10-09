@@ -1,11 +1,9 @@
 package tp1_Introduction;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -13,24 +11,17 @@ public abstract class Graph {
 
 	private final static int MAX_NUMBERS_PER_LINE = 2;
 
-	/**
-	 * Vérifier si le graphe contient un sommet
-	 * 
-	 * @param number
-	 *            Sommet à chercher
-	 * @return Le sommet retrouvé, ou null sinon
-	 */
-	abstract Optional<? extends Vertex> containsVertex(int number);
+	protected HashSet<Integer> numbers = new HashSet<>();
 
 	/**
-	 * Ajout un sommet, en vérifiant d'abord qu'il n'est pas déjà dans le
-	 * graphe.
+	 * Obtenir un sommet, soit déjà existant et indexé, soit un nouveau indexé
+	 * dans la méthode-même
 	 * 
 	 * @param vertex
 	 *            numéro du sommet
-	 * @return Le sommet ajouté, ou retrouvé
+	 * @return Le sommet obtenu, ou créé
 	 */
-	abstract Vertex addVertex(int vertex);
+	abstract Vertex retrieveOrCreate(int vertex);
 
 	/**
 	 * Ajoute au graphe deux sommets, sans dupliquer, et créée entre eux des
@@ -41,12 +32,28 @@ public abstract class Graph {
 	 */
 	abstract void addVertices(int v1, int v2);
 
+	/**
+	 * Redimensionne la liste si pas assez de mémoire allouée
+	 * 
+	 * @param until
+	 *            taille incluse jusqu'à laquelle redimensionnée
+	 */
+	abstract protected void resizeList(int until);
+
 	abstract String getNeighborsSeparator();
 
 	abstract int getVerticesCount();
 
+	/**
+	 * Obtenir le nombre d'arcs : chaque arc est comptabilisé deux fois : pour
+	 * les deux sommets qu'il lie. Il suffit donc, pour tous les sommets, de ne
+	 * prendre que les arcs entrants.
+	 */
 	abstract int getArcsCount();
 
+	/**
+	 * @return Valeur du plus haut sommet
+	 */
 	abstract int getVertexMaxNumber();
 
 	abstract void printStats();
@@ -80,10 +87,10 @@ public abstract class Graph {
 			 * Toutes les lignes commençant avec un digit sont considérées.
 			 **/
 			try (Stream<String> stream = Files.lines(Paths.get(path))) {
-				 stream.map(line -> line.trim().replace(";", ""))
-				 .filter(line -> !line.isEmpty() &&
-				 Character.isDigit(line.charAt(0)))
-				 .forEach(line -> loadLine(graph, line)); // pas assez performant
+				stream.map(line -> line.trim().replace(";", ""))
+						.filter(line -> !line.isEmpty() && Character.isDigit(line.charAt(0)))
+						.limit(10000000)
+						.forEach(line -> loadLine(graph, line));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -105,6 +112,7 @@ public abstract class Graph {
 				Optional<String> firstLine = stream.findFirst();
 				if (!firstLine.isPresent()) {
 					System.err.println("Fichier '" + path + "' vide !");
+					System.exit(1);
 				}
 
 				String firstWord = firstLine.get().trim().split(" ")[0];
@@ -146,7 +154,7 @@ public abstract class Graph {
 
 			switch (vertices.length) {
 			case 1:
-				graph.addVertex(vertices[0]);
+				graph.retrieveOrCreate(vertices[0]);
 				break;
 			case 2:
 				graph.addVertices(vertices[0], vertices[1]);

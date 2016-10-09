@@ -2,46 +2,66 @@ package tp1_Introduction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class StandardGraph extends Graph {
 	
 	public final static String NAME = "graph";
 	public final static String NEIGHBORS_SEPARATOR = "--";
-	public LinkedList<StandardVertex> vertices = new LinkedList<StandardVertex>();
+	public ArrayList<StandardVertex> vertices = new ArrayList<>();
 
 	@Override
 	String getNeighborsSeparator() {
 		return NEIGHBORS_SEPARATOR;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	Optional<StandardVertex> containsVertex(int numberArg) {
-		return (Optional<StandardVertex>) Vertex.containsVertex(vertices, numberArg);
-	}
-
-	@Override
-	StandardVertex addVertex(int number) {
-		Optional<StandardVertex> v = containsVertex(number);
-		if (!v.isPresent()) {
-			StandardVertex otherVertex = new StandardVertex(number); 
-			vertices.add(otherVertex);
+	StandardVertex retrieveOrCreate(int number) {
+		StandardVertex v = null;
+		try {
+			v = vertices.get(number);
+		} catch (IndexOutOfBoundsException e) {
+			// si number pas encore indexé
+			StandardVertex otherVertex = new StandardVertex(number);
+			addToList(number, otherVertex);
 			return otherVertex;
-		} else {
-			return v.get();
+		}
+		if (v == null) {
+			// vertices.get(number) a renvoyé null
+			StandardVertex otherVertex = new StandardVertex(number);
+			addToList(number, otherVertex);
+			return otherVertex;
+		} else { // number déjà indexé, récupération
+			return v;
 		}
 		
 	}
 
 	@Override
 	void addVertices(int v1, int v2) {
-		StandardVertex vertex1 = addVertex(v1);
-		StandardVertex vertex2 = addVertex(v2);
+		StandardVertex vertex1 = retrieveOrCreate(v1);
+		StandardVertex vertex2 = retrieveOrCreate(v2);
 		vertex1.addNeighbor(vertex2);
 		vertex2.addNeighbor(vertex1);
+	}
+	
+	/**
+	 * Ajouter un sommet à la liste, SANS DÉCALER d'autres éléments
+	 * @param index
+	 * @param v
+	 */
+	private void addToList(int index, StandardVertex v) {
+		if (vertices.size() <= index) {
+			resizeList(index);
+		}
+		vertices.set(index, v);
+	}
+	
+	@Override
+	protected void resizeList(int until) {
+		for (int i = vertices.size() - 1; i < until; i++) {
+			vertices.add(null);
+		}
 	}
 	
 	@Override

@@ -1,7 +1,8 @@
 package tp1_Introduction;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
 
 public class OrientedVertex extends Vertex {
 
@@ -9,8 +10,8 @@ public class OrientedVertex extends Vertex {
 		super(n);
 	}
 
-	HashSet<OrientedVertex> from = new HashSet<>(); // parents
-	public HashSet<OrientedVertex> to = new HashSet<>(); // enfants pointés
+	List<OrientedVertex> from = new ArrayList<>(); // parents
+	public List<OrientedVertex> to = new ArrayList<>(); // enfants pointés
 
 	void addParent(OrientedVertex v) {
 		from.add(v);

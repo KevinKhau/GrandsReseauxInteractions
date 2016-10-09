@@ -1,6 +1,6 @@
 package tp1_Introduction;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 public class StandardVertex extends Vertex {
 	
@@ -8,7 +8,7 @@ public class StandardVertex extends Vertex {
 		super(n);
 	}
 
-	HashSet<StandardVertex> neighbors = new HashSet<>();
+	ArrayList<StandardVertex> neighbors = new ArrayList<>();
 	
 	public void addNeighbor(StandardVertex v) {
 		neighbors.add(v);

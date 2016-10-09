@@ -1,26 +1,14 @@
 package tp1_Introduction;
 
-import java.util.List;
-import java.util.Optional;
-
 public abstract class Vertex {
 	int number;
 	boolean alreadyVisited = false;
 
-	public Integer index = null;
-	public Integer low = null;
+	public int index = 0;
+	public int low = 0;
 	public boolean insideStack;
 
 	abstract int getAccessibleNeighborsCount();
-
-	static public Optional<? extends Vertex> containsVertex(List<? extends Vertex> l, int n) {
-		for (Vertex v : l) {
-			if (v != null && v.number == n) {
-				return Optional.of(v);
-			}
-		}
-		return Optional.empty();
-	}
 
 	public Vertex(int n) {
 		this.number = n;
@@ -35,7 +23,7 @@ public abstract class Vertex {
 	 * l'initialisation, index et low sont tous les deux modifiés
 	 */
 	public boolean isInitialized() {
-		return index != null;
+		return index != 0;
 	}
 
 }

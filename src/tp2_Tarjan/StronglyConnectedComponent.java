@@ -1,8 +1,8 @@
 package tp2_Tarjan;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
-import java.util.LinkedList;
 import java.util.Stack;
 
 import tp1_Introduction.OrientedVertex;
@@ -10,7 +10,7 @@ import tp1_Introduction.OrientedVertex;
 /**
  * Ensemble de sommets qui forment une composante fortement connexe
  */
-public class StronglyConnectedComponent extends LinkedList<OrientedVertex> {
+public class StronglyConnectedComponent extends ArrayList<OrientedVertex> {
 
 	private static final long serialVersionUID = 1L;
 
