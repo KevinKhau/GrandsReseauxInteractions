@@ -30,7 +30,7 @@ public class Tarjan {
 		stack.push(v);
 		count++;
 		v.insideStack = true;
-		v.to.stream().filter(w -> (w != null)).forEach(w -> {
+		v.to.values().stream().filter(w -> (w != null)).forEach(w -> {
 			if (w.index == 0) {
 				buildComponent(w);
 				v.low = Math.min(v.low, w.low);

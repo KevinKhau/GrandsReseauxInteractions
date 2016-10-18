@@ -34,5 +34,10 @@ public abstract class Vertex {
 	public boolean isInitialized() {
 		return index != 0;
 	}
+	
+	/**
+	 * Réorganise les données des voisins pour que les indices correspondent bien aux numéros de sommet
+	 */
+	public abstract void rearrange();
 
 }

@@ -3,7 +3,6 @@ package tp1_Introduction;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -71,12 +70,17 @@ public class OrientedGraph extends Graph {
 	}
 
 	@Override
-	int getVerticesCount() {
+	public int getVerticesCount() {
 		return (int) vertices.stream().filter(v -> v != null).count();
+	}
+	
+	@Override
+	public int getActiveVerticesCount() {
+		return (int) vertices.stream().filter(v -> v != null && !v.removed).count();
 	}
 
 	@Override
-	int getArcsCount() {
+	public int getArcsCount() {
 		return vertices.stream().filter(v -> v != null).mapToInt(v -> v.from.size()).sum();
 	}
 
@@ -127,12 +131,17 @@ public class OrientedGraph extends Graph {
 		String fileName = path.getFileName().toString();
 		fileName = fileName.substring(0, fileName.lastIndexOf("."));
 		out.add(NAME + " " + fileName + " {");
-		vertices.stream().filter(v -> v != null)
-				.forEach(v -> out.addAll(v.to.stream()
+		vertices.stream().filter(v -> v != null).forEach(v -> {
+			if (v.to.isEmpty()) {
+				out.add(String.valueOf(v.number) + " ;");
+			} else {
+				out.addAll(v.to.values().stream()
 						.map(son -> v.number + " " + NEIGHBORS_SEPARATOR + " " + String.valueOf(son.number) + " ;")
-						.collect(Collectors.toList())));
+						.collect(Collectors.toList()));
+			}
+		});
 		out.add("}");
-		System.out.println(out.size() - 2);
+		System.out.println("Fichier " + path + " de " + out.size() + " lignes généré");
 		try {
 			Files.write(path, out);
 		} catch (IOException e) {
@@ -145,10 +154,33 @@ public class OrientedGraph extends Graph {
 			OrientedVertex v = vertices.get(i);
 			if (v == null) {
 				continue;
+			}
+			if (v.removed) {
+				vertices.set(i, null);
 			} else if (v.remove(k)) {
 				vertices.set(i, null);
 			}
 		}
+	}
+
+	@Override
+	public void renumber() {
+		int count = 0;
+		for (OrientedVertex v : vertices) {
+			if (v != null && !v.removed) {
+				v.number = count;
+				count++;
+			}
+		}
+	}
+
+	@Override
+	public void rearrange() {
+		List<OrientedVertex> res = new ArrayList<>(vertices.size());
+		List<OrientedVertex> old = vertices;
+		vertices = res;
+		old.stream().filter(v -> v != null && !v.removed).forEach(v -> addToList(v.number, v));
+		vertices.stream().forEach(OrientedVertex::rearrange);
 	}
 
 }

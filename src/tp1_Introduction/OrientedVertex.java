@@ -1,8 +1,8 @@
 package tp1_Introduction;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class OrientedVertex extends Vertex implements Cloneable {
 
@@ -10,23 +10,34 @@ public class OrientedVertex extends Vertex implements Cloneable {
 		super(n);
 	}
 
-	List<OrientedVertex> from = new ArrayList<>(); // parents
-	public List<OrientedVertex> to = new ArrayList<>(); // enfants pointés
+	/**
+	 * <p>
+	 * On abandonne ici les ArrayList, parce que les valeurs seraient très
+	 * éparses et on utiliserait beaucoup de mémoire alors qu'on associerait
+	 * null à la plupart des indices.
+	 * </p>
+	 * <p>
+	 * À la place, on utilise des Maps, puisqu'on peut y placer des indices très
+	 * éloignés, et que .get() est en 0(1), presque pareil pour remove() donc.
+	 * Tandis qu'avec une List, remove() est en 0(n) au pire, très gênant pour
+	 * calculer le k-core.
+	 * </p>
+	 */
+	Map<Integer, OrientedVertex> from = new TreeMap<>(); // parents
+	public Map<Integer, OrientedVertex> to = new TreeMap<>(); // enfants pointés
 
 	void addParent(OrientedVertex v) {
-		from.add(v);
+		from.put(v.number, v);
 	}
 
 	void addChild(OrientedVertex v) {
-		to.add(v);
+		to.put(v.number, v);
 	}
 
 	@Override
 	public String toString() {
-		return "\nOrientedVertex [number=" + number + ", from="
-				+ Arrays.toString(from.stream().map(v -> v.number).toArray(Integer[]::new)) + ", to="
-				+ Arrays.toString(to.stream().map(v -> v.number).toArray(Integer[]::new)) + ", index=" + index
-				+ ", low=" + low + "]";
+		return "\nOrientedVertex [number=" + number + ", from=" + from.keySet().toString() + ", to="
+				+ to.keySet().toString() + ", index=" + index + ", low=" + low + "]";
 	}
 
 	public int getChildrenCount() {
@@ -43,7 +54,7 @@ public class OrientedVertex extends Vertex implements Cloneable {
 			alreadyVisited = true;
 			count++;
 		}
-		for (OrientedVertex child : to) {
+		for (OrientedVertex child : to.values()) {
 			if (!child.alreadyVisited) {
 				count += child.getAccessibleNeighborsCount();
 			}
@@ -53,10 +64,17 @@ public class OrientedVertex extends Vertex implements Cloneable {
 
 	@Override
 	public boolean remove(int k) {
+		for (Iterator<Map.Entry<Integer, OrientedVertex>> it = from.entrySet().iterator(); it.hasNext();) {
+			Map.Entry<Integer, OrientedVertex> entry = it.next();
+			if (entry.getValue().removed) {
+				it.remove();
+			}
+		}
 		if (removed == false && getChildrenCount() < k) {
 			removed = true;
-			for (OrientedVertex parent : from) {
-				parent.to.remove(this); // appel gourmand en O(n) au pire, alors qu'avec des indices, 0(1). Mais on aurait alors plein d'ArrayLists inutilement grands.
+			for (Map.Entry<Integer, OrientedVertex> entry : from.entrySet()) {
+				OrientedVertex parent = entry.getValue();
+				parent.to.remove(this.number);
 				parent.remove(k);
 			}
 			from.clear();
@@ -65,6 +83,17 @@ public class OrientedVertex extends Vertex implements Cloneable {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public void rearrange() {
+		Map<Integer, OrientedVertex> tmp = new TreeMap<>();
+		from.values().stream().filter(v -> v!= null && !v.removed).forEach(v -> tmp.put(v.number, v));
+		from = tmp;
+		
+		Map<Integer, OrientedVertex> tmp2 = new TreeMap<>();
+		to.values().stream().filter(v -> v!= null && !v.removed).forEach(v -> tmp2.put(v.number, v));
+		to = tmp2;
 	}
 
 }

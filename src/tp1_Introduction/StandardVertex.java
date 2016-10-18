@@ -32,5 +32,17 @@ public class StandardVertex extends Vertex {
 		}
 		return count;
 	}
+
+	@Override
+	public boolean remove(int k) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void rearrange() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

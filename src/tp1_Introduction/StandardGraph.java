@@ -1,5 +1,6 @@
 package tp1_Introduction;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -65,12 +66,12 @@ public class StandardGraph extends Graph {
 	}
 	
 	@Override
-	int getVerticesCount() {
+	public int getVerticesCount() {
 		return vertices.size();
 	}
 	
 	@Override
-	int getArcsCount() {
+	public int getArcsCount() {
 		return vertices.stream().mapToInt(v -> v.neighbors.size()).sum() / 2;
 	}
 
@@ -91,6 +92,30 @@ public class StandardGraph extends Graph {
 				getVertexMaxNumber()
 		}));
 		System.out.println(stats.stream().map(Object::toString).collect(Collectors.joining(" ")));
+	}
+
+	@Override
+	public int getActiveVerticesCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void renumber() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rearrange() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void outputDotFile(Path path) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

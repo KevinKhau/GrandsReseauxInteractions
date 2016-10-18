@@ -43,14 +43,19 @@ public abstract class Graph {
 
 	abstract String getNeighborsSeparator();
 
-	abstract int getVerticesCount();
+	public abstract int getVerticesCount();
+	
+	/**
+	 * Obtenir le nombre de sommets qui ne sont pas marqués {@link Vertex#removed}
+	 */
+	public abstract int getActiveVerticesCount();
 
 	/**
 	 * Obtenir le nombre d'arcs : chaque arc est comptabilisé deux fois : pour
 	 * les deux sommets qu'il lie. Il suffit donc, pour tous les sommets, de ne
 	 * prendre que les arcs entrants.
 	 */
-	abstract int getArcsCount();
+	public abstract int getArcsCount();
 
 	/**
 	 * @return Valeur du plus haut sommet
@@ -66,6 +71,18 @@ public abstract class Graph {
 	 *            Numéro du sommet de départ
 	 */
 	abstract int getAccessibleNeighborsCount(int vertexNumber);
+	
+	/** 
+	 * Renumérote les valeurs de 0 à n-1 s'il y a n sommets, au cas où il y aurait des valeurs manquantes.
+	 * Les numéros des sommets ne correspondent alors plus aux indices des List et Map dans lesquels ils avaient été stockés.
+	 */
+	public abstract void renumber();
+	
+	/**
+	 * Réarranger les sommets pour s'assurer qu'à chaque indice, le sommet avec le même numéro est associé
+	 * Les sommets marqués "removed" sont totalement supprimés et deviennent inaccessibles.
+	 */
+	public abstract void rearrange();
 	
 	public abstract void outputDotFile(Path path);
 
