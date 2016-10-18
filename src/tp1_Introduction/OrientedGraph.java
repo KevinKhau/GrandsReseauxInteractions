@@ -1,7 +1,12 @@
 package tp1_Introduction;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +52,7 @@ public class OrientedGraph extends Graph {
 
 	/**
 	 * Ajouter un sommet à la liste, SANS DÉCALER d'autres éléments
+	 * 
 	 * @param index
 	 * @param v
 	 */
@@ -78,20 +84,24 @@ public class OrientedGraph extends Graph {
 	 * @return Degré sortant maximum d'un sommet
 	 */
 	int getMaxOutArc() {
-		return vertices.stream().filter(v -> v != null).max((v1, v2) -> Integer.compare(v1.to.size(), v2.to.size())).get().to.size();
+		return vertices.stream().filter(v -> v != null).max((v1, v2) -> Integer.compare(v1.to.size(), v2.to.size()))
+				.get().to.size();
 	}
 
 	/**
 	 * @return Degré entrant maximum d'un sommet
 	 */
 	int getMaxInArc() {
-		return vertices.stream().filter(v -> v != null).max((v1, v2) -> Integer.compare(v1.from.size(), v2.from.size())).get().from.size();
+		return vertices.stream().filter(v -> v != null).max((v1, v2) -> Integer.compare(v1.from.size(), v2.from.size()))
+				.get().from.size();
 	}
 
 	@Override
 	int getVertexMaxNumber() {
-		return vertices.size() - 1; // Logiquement, la dernière valeur du tableau devrait être la plus haute
-//		return vertices.stream().filter(v -> v != null).max((v1, v2) -> Integer.compare(v1.number, v2.number)).get().number;
+		return vertices.size() - 1; // Logiquement, la dernière valeur du
+									// tableau devrait être la plus haute
+		// return vertices.stream().filter(v -> v != null).max((v1, v2) ->
+		// Integer.compare(v1.number, v2.number)).get().number;
 	}
 
 	int getAccessibleNeighborsCount(int vertexNumber) {
@@ -109,6 +119,36 @@ public class OrientedGraph extends Graph {
 	@Override
 	public String toString() {
 		return "OrientedGraph [vertices=" + vertices + "\n]";
+	}
+
+	@Override
+	public void outputDotFile(Path path) {
+		List<String> out = new LinkedList<>();
+		String fileName = path.getFileName().toString();
+		fileName = fileName.substring(0, fileName.lastIndexOf("."));
+		out.add(NAME + " " + fileName + " {");
+		vertices.stream().filter(v -> v != null)
+				.forEach(v -> out.addAll(v.to.stream()
+						.map(son -> v.number + " " + NEIGHBORS_SEPARATOR + " " + String.valueOf(son.number) + " ;")
+						.collect(Collectors.toList())));
+		out.add("}");
+		System.out.println(out.size() - 2);
+		try {
+			Files.write(path, out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void core(int k) {
+		for (int i = 0; i < vertices.size(); i++) {
+			OrientedVertex v = vertices.get(i);
+			if (v == null) {
+				continue;
+			} else if (v.remove(k)) {
+				vertices.set(i, null);
+			}
+		}
 	}
 
 }

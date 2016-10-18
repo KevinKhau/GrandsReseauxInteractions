@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class OrientedVertex extends Vertex {
+public class OrientedVertex extends Vertex implements Cloneable {
 
 	public OrientedVertex(int n) {
 		super(n);
@@ -49,6 +49,22 @@ public class OrientedVertex extends Vertex {
 			}
 		}
 		return count;
+	}
+
+	@Override
+	public boolean remove(int k) {
+		if (removed == false && getChildrenCount() < k) {
+			removed = true;
+			for (OrientedVertex parent : from) {
+				parent.to.remove(this); // appel gourmand en O(n) au pire, alors qu'avec des indices, 0(1). Mais on aurait alors plein d'ArrayLists inutilement grands.
+				parent.remove(k);
+			}
+			from.clear();
+			to.clear();
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

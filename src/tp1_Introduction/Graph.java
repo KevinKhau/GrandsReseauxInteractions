@@ -1,6 +1,7 @@
 package tp1_Introduction;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -65,6 +66,8 @@ public abstract class Graph {
 	 *            Numéro du sommet de départ
 	 */
 	abstract int getAccessibleNeighborsCount(int vertexNumber);
+	
+	public abstract void outputDotFile(Path path);
 
 	public final static class GraphProvider {
 

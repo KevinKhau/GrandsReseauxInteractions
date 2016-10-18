@@ -30,17 +30,14 @@ public class Tarjan {
 		stack.push(v);
 		count++;
 		v.insideStack = true;
-		for (OrientedVertex w : v.to) {
-			if (w == null) {
-				continue;
-			}
+		v.to.stream().filter(w -> (w != null)).forEach(w -> {
 			if (w.index == 0) {
 				buildComponent(w);
 				v.low = Math.min(v.low, w.low);
 			} else if (w.insideStack) {
 				v.low = Math.min(v.low, w.index);
 			}
-		}
+		});
 		if (v.low == v.index) {
 			components.add(new StronglyConnectedComponent(stack, v));
 		}
@@ -61,17 +58,17 @@ public class Tarjan {
 			System.err.println("Seuls les graphes orientés sont traités pour le moment");
 		}
 
-//		long startTime = System.nanoTime();
+		long startTime = System.nanoTime();
 
 		Tarjan tarjan = new Tarjan((OrientedGraph) g);
 		System.out.println(tarjan.components.size());
 
-		// tarjan.printComponents();
-//		long endTime = System.nanoTime();
-//		long duration = (endTime - startTime);
-//		System.out.println(duration + "ns");
-//		System.out.println(duration / 1000000 + "ms");
-//		System.out.println(duration / 1000000000 + "s");
+//		 tarjan.printComponents();
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		System.out.println(duration + "ns");
+		System.out.println(duration / 1000000 + "ms");
+		System.out.println(duration / 1000000000 + "s");
 	}
 
 }
