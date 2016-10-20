@@ -1,9 +1,8 @@
 package tp3_CoeurDense;
 
 import tp1_Introduction.Graph;
-import tp1_Introduction.OrientedGraph;
 import tp1_Introduction.Graph.GraphProvider;
-import tp2_Tarjan.Tarjan;
+import tp1_Introduction.OrientedGraph;
 
 public class coeurDense {
 
@@ -21,7 +20,7 @@ public class coeurDense {
 	 * 
 	 * @return a densité maximale
 	 */
-	public double calculate() {
+	public double calculate(boolean output) {
 		maxDensity = 0;
 		int k = 0;
 		while (true) {
@@ -30,6 +29,8 @@ public class coeurDense {
 				return maxDensity;
 			}
 			double density = (double) graph.getArcsCount() / nbActiveVertices;
+			System.out.println(k + " ; " + density + " ; " + graph);
+
 			if (maxDensity < density) {
 				maxDensity = density;
 				maxK = k;
@@ -37,6 +38,10 @@ public class coeurDense {
 			k++;
 			graph.core(k);
 		}
+	}
+	
+	public double calculate() {
+		return calculate(false);
 	}
 
 	@Override

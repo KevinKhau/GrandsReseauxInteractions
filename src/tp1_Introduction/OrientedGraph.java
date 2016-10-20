@@ -73,7 +73,7 @@ public class OrientedGraph extends Graph {
 	public int getVerticesCount() {
 		return (int) vertices.stream().filter(v -> v != null).count();
 	}
-	
+
 	@Override
 	public int getActiveVerticesCount() {
 		return (int) vertices.stream().filter(v -> v != null && !v.removed).count();
@@ -122,7 +122,23 @@ public class OrientedGraph extends Graph {
 
 	@Override
 	public String toString() {
-		return "OrientedGraph [vertices=" + vertices + "\n]";
+		String res = "OrientedGraph [vertices=";
+		for (OrientedVertex v : vertices) {
+			if (v != null) {
+				res += v;
+			}
+		}
+		return res += "\n]";
+	}
+
+	public String printRaw() {
+		String res = "OrientedGraph [vertices=";
+		for (OrientedVertex v : vertices) {
+			if (v != null && !v.removed) {
+				res += v.printRaw();
+			}
+		}
+		return res += "\n]";
 	}
 
 	@Override

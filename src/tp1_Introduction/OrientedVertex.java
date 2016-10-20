@@ -37,7 +37,12 @@ public class OrientedVertex extends Vertex implements Cloneable {
 	@Override
 	public String toString() {
 		return "\nOrientedVertex [number=" + number + ", from=" + from.keySet().toString() + ", to="
-				+ to.keySet().toString() + ", index=" + index + ", low=" + low + "]";
+				+ to.keySet().toString() + ", index=" + index + ", low=" + low + ", removed=" + removed + "]";
+	}
+
+	public String printRaw() {
+		return "\nOrientedVertex [number=" + number + ", from=" + from.keySet().toString() + ", to="
+				+ to.keySet().toString() + "]";
 	}
 
 	public int getChildrenCount() {
@@ -88,11 +93,11 @@ public class OrientedVertex extends Vertex implements Cloneable {
 	@Override
 	public void rearrange() {
 		Map<Integer, OrientedVertex> tmp = new TreeMap<>();
-		from.values().stream().filter(v -> v!= null && !v.removed).forEach(v -> tmp.put(v.number, v));
+		from.values().stream().filter(v -> v != null && !v.removed).forEach(v -> tmp.put(v.number, v));
 		from = tmp;
-		
+
 		Map<Integer, OrientedVertex> tmp2 = new TreeMap<>();
-		to.values().stream().filter(v -> v!= null && !v.removed).forEach(v -> tmp2.put(v.number, v));
+		to.values().stream().filter(v -> v != null && !v.removed).forEach(v -> tmp2.put(v.number, v));
 		to = tmp2;
 	}
 

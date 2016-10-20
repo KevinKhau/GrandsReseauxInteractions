@@ -1,7 +1,6 @@
 package tp2_Tarjan;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
@@ -29,7 +28,11 @@ public class StronglyConnectedComponent extends ArrayList<OrientedVertex> {
 
 	@Override
 	public String toString() {
-		return "StronglyConnectedComponent " + Arrays.toString(this.stream().map(v -> v.getNumber()).toArray(Integer[]::new));
+		String res = "StronglyConnectedComponent, total of " + this.size() + " vertices :";
+		for (OrientedVertex v : this) {
+			res += v.toString();
+		}
+		return res;
 	}
 
 }

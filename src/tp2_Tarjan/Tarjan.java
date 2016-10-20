@@ -11,7 +11,7 @@ import tp1_Introduction.OrientedVertex;
 
 public class Tarjan {
 
-	List<StronglyConnectedComponent> components = new ArrayList<>();
+	public List<StronglyConnectedComponent> components = new ArrayList<>();
 
 	Stack<OrientedVertex> stack = new Stack<>();
 	int count = 1;

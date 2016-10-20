@@ -1,10 +1,12 @@
 package tp1_Introduction;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -44,9 +46,10 @@ public abstract class Graph {
 	abstract String getNeighborsSeparator();
 
 	public abstract int getVerticesCount();
-	
+
 	/**
-	 * Obtenir le nombre de sommets qui ne sont pas marqués {@link Vertex#removed}
+	 * Obtenir le nombre de sommets qui ne sont pas marqués
+	 * {@link Vertex#removed}
 	 */
 	public abstract int getActiveVerticesCount();
 
@@ -71,37 +74,44 @@ public abstract class Graph {
 	 *            Numéro du sommet de départ
 	 */
 	abstract int getAccessibleNeighborsCount(int vertexNumber);
-	
-	/** 
-	 * Renumérote les valeurs de 0 à n-1 s'il y a n sommets, au cas où il y aurait des valeurs manquantes.
-	 * Les numéros des sommets ne correspondent alors plus aux indices des List et Map dans lesquels ils avaient été stockés.
+
+	/**
+	 * Renumérote les valeurs de 0 à n-1 s'il y a n sommets, au cas où il y
+	 * aurait des valeurs manquantes. Les numéros des sommets ne correspondent
+	 * alors plus aux indices des List et Map dans lesquels ils avaient été
+	 * stockés.
 	 */
 	public abstract void renumber();
-	
+
 	/**
-	 * Réarranger les sommets pour s'assurer qu'à chaque indice, le sommet avec le même numéro est associé
-	 * Les sommets marqués "removed" sont totalement supprimés et deviennent inaccessibles.
+	 * Réarranger les sommets pour s'assurer qu'à chaque indice, le sommet avec
+	 * le même numéro est associé Les sommets marqués "removed" sont totalement
+	 * supprimés et deviennent inaccessibles.
 	 */
 	public abstract void rearrange();
-	
+
 	public abstract void outputDotFile(Path path);
 
 	public final static class GraphProvider {
 
 		Graph graph = null;
 
-		public static Graph loadDotFile(String path) {
+		public static boolean checkExtension(String path, String expected) {
 			String extension = "";
-			final String expectedExtension = "dot";
 			int i = path.lastIndexOf('.');
 			if (i > 0) {
 				extension = path.substring(i + 1);
 			}
-			if (!extension.equals(expectedExtension)) {
-				System.err.println("Format de fichier invalide (" + expectedExtension + " attendu)");
+			if (!extension.equals(expected)) {
+				System.err.println("Format de fichier invalide ('" + expected + "' attendu)");
+				return false;
 			}
+			return true;
+		}
 
-			Graph graph = getGraphType(path);
+		public static Graph loadDotFile(String path) {
+			checkExtension(path, "dot");
+			Graph graph = getGraphTypeFromDot(path);
 
 			/**
 			 * Toutes les lignes commençant avec un digit sont considérées.
@@ -109,14 +119,38 @@ public abstract class Graph {
 			try (Stream<String> stream = Files.lines(Paths.get(path))) {
 				stream.map(line -> line.trim().replace(";", ""))
 						.filter(line -> !line.isEmpty() && Character.isDigit(line.charAt(0)))
-						.limit(10000000)
 						.forEach(line -> loadLine(graph, line));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 			return graph;
+		}
 
+		public static Graph loadDatFile(String path) {
+			checkExtension(path, "dat");
+			final int DOMINATE = 1;
+			OrientedGraph graph = new OrientedGraph();
+			try {
+				List<String> lines = Files.readAllLines(Paths.get(path));
+				int id = 1;
+				for (String l : lines) {
+					String[] tmp = l.trim().split(" ");
+					for (int i = 0; i < id - 1; i++) {
+						if (Integer.parseInt(tmp[i]) == DOMINATE) {
+							graph.addVertices(id, i + 1);
+						}
+					}
+					for (int i = id; i < tmp.length; i++) {
+						if (Integer.parseInt(tmp[i]) == DOMINATE) {
+							graph.addVertices(id, i + 1);
+						}
+					}
+					id++;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return graph;
 		}
 
 		/**
@@ -127,7 +161,7 @@ public abstract class Graph {
 		 *            Chemin du fichier
 		 * @return Graphe : normal ou orienté
 		 */
-		static Graph getGraphType(String path) {
+		static Graph getGraphTypeFromDot(String path) {
 			try (Stream<String> stream = Files.lines(Paths.get(path))) {
 				Optional<String> firstLine = stream.findFirst();
 				if (!firstLine.isPresent()) {
