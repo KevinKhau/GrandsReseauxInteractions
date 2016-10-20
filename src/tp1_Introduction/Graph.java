@@ -126,12 +126,12 @@ public abstract class Graph {
 			return graph;
 		}
 
-		public static Graph loadDatFile(String path) {
-			checkExtension(path, "dat");
+		public static Graph loadDatFile(Path path) {
+			checkExtension(path.toString(), "dat");
 			final int DOMINATE = 1;
 			OrientedGraph graph = new OrientedGraph();
 			try {
-				List<String> lines = Files.readAllLines(Paths.get(path));
+				List<String> lines = Files.readAllLines(path);
 				int id = 1;
 				for (String l : lines) {
 					String[] tmp = l.trim().split(" ");
@@ -148,6 +148,17 @@ public abstract class Graph {
 					id++;
 				}
 			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return graph;
+		}
+		
+		public static Graph loadEdgesFile(Path path) {
+			checkExtension(path.toString(), "edges");
+			OrientedGraph graph = new OrientedGraph();
+			try (Stream<String> stream = Files.lines(path)) {
+				stream.forEach(line -> loadEdgesLine(graph, line));
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return graph;
@@ -220,6 +231,21 @@ public abstract class Graph {
 			}
 		}
 
+		static void loadEdgesLine(OrientedGraph graph, String line) {
+			String[] tmp = line.split("\t");
+			switch (tmp.length) {
+			case 1:
+				graph.retrieveOrCreate(Integer.parseInt(tmp[0]));
+				break;
+			case 2:
+				graph.addVertices(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]));
+				break;
+			default:
+				System.err.println("Ligne : " + line);
+				System.err.println("Attendu : maximum " + Graph.MAX_NUMBERS_PER_LINE + " numéros");
+				break;
+			}
+		}
 	}
 
 }

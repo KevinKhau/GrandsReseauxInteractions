@@ -27,8 +27,8 @@ public class Tarjan {
 	private void buildComponent(OrientedVertex v) {
 		v.index = count;
 		v.low = count;
-		stack.push(v);
 		count++;
+		stack.push(v);
 		v.insideStack = true;
 		v.to.values().stream().filter(w -> (w != null)).forEach(w -> {
 			if (w.index == 0) {
