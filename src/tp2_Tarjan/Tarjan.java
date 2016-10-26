@@ -1,6 +1,6 @@
 package tp2_Tarjan;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -11,7 +11,7 @@ import tp1_Introduction.OrientedVertex;
 
 public class Tarjan {
 
-	public List<StronglyConnectedComponent> components = new ArrayList<>();
+	public List<StronglyConnectedComponent> components = new LinkedList<>();
 
 	Stack<OrientedVertex> stack = new Stack<>();
 	int count = 1;

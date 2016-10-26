@@ -10,17 +10,17 @@ public class StatsDeBase {
 			System.exit(1);
 		}
 		
-//		long startTime = System.nanoTime();
+		long startTime = System.nanoTime();
 		
 		Graph g = GraphProvider.loadDotFile(args[0]);
 		// System.out.println(g);
 		g.printStats();
 		
-//		long endTime = System.nanoTime();
-//		long duration = (endTime - startTime);
-//		System.out.println(duration + "ns");
-//		System.out.println(duration/1000000 + "ms");
-//		System.out.println(duration/1000000000 + "s");
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		System.out.println(duration + "ns");
+		System.out.println(duration/1000000 + "ms");
+		System.out.println(duration/1000000000 + "s");
 	}
 
 }

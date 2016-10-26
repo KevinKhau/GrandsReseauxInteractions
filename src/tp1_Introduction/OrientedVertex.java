@@ -1,10 +1,12 @@
 package tp1_Introduction;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class OrientedVertex extends Vertex implements Cloneable {
+public class OrientedVertex extends Vertex {
 
 	public OrientedVertex(int n) {
 		super(n);
@@ -18,13 +20,15 @@ public class OrientedVertex extends Vertex implements Cloneable {
 	 * </p>
 	 * <p>
 	 * À la place, on utilise des Maps, puisqu'on peut y placer des indices très
-	 * éloignés, et que .get() est en 0(1), presque pareil pour remove() donc.
+	 * éloignés, et que .get() est en 0(1), pareil pour remove() donc.
 	 * Tandis qu'avec une List, remove() est en 0(n) au pire, très gênant pour
 	 * calculer le k-core.
 	 * </p>
 	 */
 	Map<Integer, OrientedVertex> from = new TreeMap<>(); // parents
 	public Map<Integer, OrientedVertex> to = new TreeMap<>(); // enfants pointés
+//	List<OrientedVertex> from = new ArrayList<OrientedVertex>();
+//	List<OrientedVertex> to = new ArrayList<OrientedVertex>();
 
 	void addParent(OrientedVertex v) {
 		from.put(v.number, v);
