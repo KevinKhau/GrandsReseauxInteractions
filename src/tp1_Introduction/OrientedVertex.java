@@ -27,8 +27,6 @@ public class OrientedVertex extends Vertex {
 	 */
 	Map<Integer, OrientedVertex> from = new TreeMap<>(); // parents
 	public Map<Integer, OrientedVertex> to = new TreeMap<>(); // enfants pointés
-//	List<OrientedVertex> from = new ArrayList<OrientedVertex>();
-//	List<OrientedVertex> to = new ArrayList<OrientedVertex>();
 
 	void addParent(OrientedVertex v) {
 		from.put(v.number, v);

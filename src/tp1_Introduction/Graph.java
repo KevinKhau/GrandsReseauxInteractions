@@ -119,6 +119,7 @@ public abstract class Graph {
 			try (Stream<String> stream = Files.lines(Paths.get(path))) {
 				stream.map(line -> line.trim().replace(";", ""))
 						.filter(line -> !line.isEmpty() && Character.isDigit(line.charAt(0)))
+						.limit(1000000)
 						.forEach(line -> loadLine(graph, line));
 			} catch (Exception e) {
 				e.printStackTrace();
